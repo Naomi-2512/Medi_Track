@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EnrollmentUpdateSchema = exports.EnrollmentRegistrationSchema = exports.ProgramUpdateSchema = exports.ProgramRegistrationSchema = exports.ClientSoftDeleteSchema = exports.ClientUpdateSchema = exports.ClientRegistrationSchema = exports.DoctorChangePasswordSchema = exports.DoctorUpdateSchema = exports.DoctorRegistrationSchema = void 0;
+exports.EnrollmentUpdateSchema = exports.EnrollmentRegistrationSchema = exports.ProgramUpdateSchema = exports.ProgramRegistrationSchema = exports.ClientSoftDeleteSchema = exports.ClientSearchSchema = exports.ClientUpdateSchema = exports.ClientRegistrationSchema = exports.DoctorChangePasswordSchema = exports.DoctorUpdateSchema = exports.DoctorRegistrationSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 exports.DoctorRegistrationSchema = joi_1.default.object({
     email: joi_1.default.string().required().email().messages({
@@ -109,6 +109,13 @@ exports.ClientUpdateSchema = joi_1.default.object({
     email: joi_1.default.string().required().email().messages({
         'string.required': 'Email is required',
         'string.email': 'Please enter a valid email address'
+    })
+});
+exports.ClientSearchSchema = joi_1.default.object({
+    query: joi_1.default.string().min(1).max(50).required().messages({
+        'string.required': 'Search query is required',
+        'string.min': 'Search query must be at least 1 character',
+        'string.max': 'Search query must not exceed 50 characters'
     })
 });
 exports.ClientSoftDeleteSchema = joi_1.default.object({

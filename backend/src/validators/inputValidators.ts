@@ -54,6 +54,7 @@ export const DoctorChangePasswordSchema = joi.object({
   })
 });
 
+
 export const ClientRegistrationSchema = joi.object({
   firstName: joi.string().min(3).max(50).required().messages({
     'string.required': 'First name is required',
@@ -109,6 +110,14 @@ export const ClientUpdateSchema = joi.object({
     'string.required': 'Email is required',
     'string.email': 'Please enter a valid email address'
   })
+});
+
+export const ClientSearchSchema = joi.object({
+    query: joi.string().min(1).max(50).required().messages({
+        'string.required': 'Search query is required',
+        'string.min': 'Search query must be at least 1 character',
+        'string.max': 'Search query must not exceed 50 characters'
+    })
 });
 
 export const ClientSoftDeleteSchema = joi.object({
