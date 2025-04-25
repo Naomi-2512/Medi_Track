@@ -1,0 +1,48 @@
+<svg viewBox="0 0 240 80" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Elements -->
+  <defs>
+    <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1976D2" />
+      <stop offset="100%" stop-color="#03A9F4" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Main Icon Element -->
+  <g transform="translate(20, 15)">
+    <!-- Health Monitor Line -->
+    <path d="M10,30 L25,30 L30,15 L40,45 L50,5 L60,30 L75,30" 
+          stroke="url(#logoGradient)" 
+          stroke-width="6" 
+          fill="none" 
+          stroke-linecap="round"
+          stroke-linejoin="round">
+      <animate attributeName="stroke-dasharray" from="200 200" to="0 0" dur="2s" begin="0s" fill="freeze" />
+      <animate attributeName="stroke-dashoffset" from="200" to="0" dur="2s" begin="0s" fill="freeze" />
+    </path>
+    
+    <!-- Circular Frame -->
+    <circle cx="40" cy="25" r="35" 
+            stroke="url(#logoGradient)" 
+            stroke-width="3" 
+            fill="none" 
+            opacity="0.7" />
+            
+    <!-- Plus Symbol -->
+    <rect x="67" y="22" width="6" height="20" rx="2" fill="#FF5722" transform="rotate(0, 70, 25)" />
+    <rect x="60" y="29" width="20" height="6" rx="2" fill="#FF5722" transform="rotate(0, 70, 25)" />
+  </g>
+  
+  <!-- Company Name -->
+  <g transform="translate(100, 37)">
+    <!-- MediTrack Text -->
+    <text font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1976D2">
+      <tspan x="0" y="0">Medi</tspan>
+      <tspan fill="#FF5722">Track</tspan>
+    </text>
+    
+    <!-- Tagline -->
+    <text font-family="Arial, sans-serif" font-size="10" font-weight="400" fill="#666666" x="3" y="18">
+      Enroll Easy
+    </text>
+  </g>
+</svg>

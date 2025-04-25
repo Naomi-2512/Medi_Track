@@ -177,3 +177,15 @@ export const EnrollmentUpdateSchema = joi.object({
     'string.valid': 'Status must be Active, Completed, or Dropped'
   })
 });
+
+export const DoctorLoginSchema = joi.object({
+    email: joi.string().required().email().messages({
+      'string.required': 'Email is required',
+      'string.email': 'Please enter a valid email address'
+    }),
+    password: joi.string().min(8).max(30).required().messages({
+      'string.min': 'Password must be at least 8 characters long',
+      'string.max': 'Password must not exceed 30 characters',
+      'string.required': 'Password is required'
+    })
+  });

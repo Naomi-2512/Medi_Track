@@ -38,9 +38,19 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importStar(require("express"));
 const cors_1 = __importDefault(require("cors"));
+const auth_route_1 = require("./routes/auth.route");
+const doctor_route_1 = require("./routes/doctor.route");
+const client_route_1 = require("./routes/client.route");
+const program_route_1 = require("./routes/program.route");
+const enrollment_route_1 = require("./routes/enrollment.route");
 const app = (0, express_1.default)();
 app.use((0, express_1.json)());
 app.use((0, cors_1.default)());
+app.use("/auth", auth_route_1.authRouter);
+app.use("/doctors", doctor_route_1.doctorRouter);
+app.use("/clients", client_route_1.clientRouter);
+app.use("/programs", program_route_1.programRouter);
+app.use("/enrollments", enrollment_route_1.enrollmentRouter);
 app.use((err, req, res, next) => {
     res.json({
         message: err.message

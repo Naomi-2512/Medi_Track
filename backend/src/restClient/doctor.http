@@ -1,0 +1,10 @@
+### register user
+POST http://localhost:3000/doctors/create
+Content-type: application/json
+
+{
+    "firstName" : "Naomi25",
+    "lastName" : "Chege",
+    "email" : "naomi@gmail.com",
+    "password" : "@Naomi2512"
+}

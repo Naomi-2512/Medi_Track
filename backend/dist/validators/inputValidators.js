@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.EnrollmentUpdateSchema = exports.EnrollmentRegistrationSchema = exports.ProgramUpdateSchema = exports.ProgramRegistrationSchema = exports.ClientSoftDeleteSchema = exports.ClientSearchSchema = exports.ClientUpdateSchema = exports.ClientRegistrationSchema = exports.DoctorChangePasswordSchema = exports.DoctorUpdateSchema = exports.DoctorRegistrationSchema = void 0;
+exports.DoctorLoginSchema = exports.EnrollmentUpdateSchema = exports.EnrollmentRegistrationSchema = exports.ProgramUpdateSchema = exports.ProgramRegistrationSchema = exports.ClientSoftDeleteSchema = exports.ClientSearchSchema = exports.ClientUpdateSchema = exports.ClientRegistrationSchema = exports.DoctorChangePasswordSchema = exports.DoctorUpdateSchema = exports.DoctorRegistrationSchema = void 0;
 const joi_1 = __importDefault(require("joi"));
 exports.DoctorRegistrationSchema = joi_1.default.object({
     email: joi_1.default.string().required().email().messages({
@@ -169,5 +169,16 @@ exports.EnrollmentUpdateSchema = joi_1.default.object({
     status: joi_1.default.string().valid('Active', 'Completed', 'Dropped').required().messages({
         'string.required': 'Status is required',
         'string.valid': 'Status must be Active, Completed, or Dropped'
+    })
+});
+exports.DoctorLoginSchema = joi_1.default.object({
+    email: joi_1.default.string().required().email().messages({
+        'string.required': 'Email is required',
+        'string.email': 'Please enter a valid email address'
+    }),
+    password: joi_1.default.string().min(8).max(30).required().messages({
+        'string.min': 'Password must be at least 8 characters long',
+        'string.max': 'Password must not exceed 30 characters',
+        'string.required': 'Password is required'
     })
 });

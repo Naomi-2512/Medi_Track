@@ -44,3 +44,8 @@ export interface Program {
     doctorId: string;
     email: string;
   }
+
+  export interface LoginDetails {
+    email: string,
+    password: string
+  }
