@@ -1,0 +1,56 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model Programs {
+  programId String @id @unique
+  name String @unique
+  description String
+  createdAt DateTime @default(now())
+  Enrollments Enrollments[] @relation("ProgramEnrollments")
+}
+
+model Clients {
+  clientId String @id @unique
+  firstName String
+  lastName String
+  dateOfBirth DateTime
+  gender String
+  phone String
+  email String @unique
+  isDeleted Boolean @default(false)
+  isWelcomed Boolean @default(false)
+  createdAt DateTime @default(now())
+  Enrollments Enrollments[] @relation("ClientEnrollments")
+}
+
+model Enrollments {
+  enrollmentId String @id @unique
+  clientId String
+  programId String
+  enrollmentDate DateTime
+  status String @default("Active")
+  createdAt DateTime @default(now())
+  Client Clients @relation("ClientEnrollments", fields: [clientId], references: [clientId], onDelete: NoAction)
+  Program Programs @relation("ProgramEnrollments", fields: [programId], references: [programId], onDelete: NoAction)
+}
+
+model Doctors {
+  doctorId String @id @unique
+  email String @unique
+  password String
+  firstName String
+  lastName String
+  createdAt DateTime @default(now())
+}
