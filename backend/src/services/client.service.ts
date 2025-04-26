@@ -302,9 +302,10 @@ export class ClientService {
     
         let clientsFetched = await this.prisma.clients.findMany({
             where: {
-                firstName: {
-                    contains: query
-                },
+                OR: [
+                    { firstName: { contains: query } },
+                    { lastName: { contains: query } },
+                ],
                 isDeleted: false
             },
             include: {
