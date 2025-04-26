@@ -1,5 +1,5 @@
 import { PrismaClient } from "@prisma/client";
-import { Client } from "../interfaces/medic.interface";
+import { Client, ClientDetails } from "../interfaces/medic.interface";
 import { v4 } from "uuid";
 import { ClientRegistrationSchema, ClientUpdateSchema, ClientSoftDeleteSchema, ClientSearchSchema } from "../validators/inputValidators";
 
@@ -8,7 +8,7 @@ export class ClientService {
         log: ['error']
     });
 
-    async createClient(client: Client) {
+    async createClient(client: ClientDetails) {
         const { error } = ClientRegistrationSchema.validate(client);
         if (error) {
             return {
@@ -52,14 +52,10 @@ export class ClientService {
             }
         }
 
-        let { clientId, isDeleted, isWelcomed,createdAt,Enrollments, ...otherDetails } = client;
-
         let clientCreated = await this.prisma.clients.create({
             data: {
                 clientId: v4(),
-                isDeleted: false,
-                isWelcomed: false,
-                ...otherDetails
+                ...client
             }
         });
 

@@ -37,7 +37,7 @@ export class ClientController {
         }
     }
 
-    async fetchClients(res: Response) {
+    async fetchClients(req: Request, res: Response) {
         try {
             let result = await clientService.fetchClients();
             res.status(201).json(result);
@@ -81,7 +81,7 @@ export class ClientController {
         }
     }
 
-    async fetchDeletedClients(res: Response) {
+    async fetchDeletedClients(req: Request, res: Response) {
         try {
             let result = await clientService.fetchDeletedClients();
             res.status(201).json(result);

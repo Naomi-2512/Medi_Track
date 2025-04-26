@@ -19,6 +19,15 @@ export interface Program {
     createdAt: Date;
     Enrollments: Enrollment[];
   }
+
+  export interface ClientDetails {
+    firstName: string;
+    lastName: string;
+    dateOfBirth: Date;
+    gender: string;
+    phone: string;
+    email: string;
+  }
   
   export interface Enrollment {
     enrollmentId: string;

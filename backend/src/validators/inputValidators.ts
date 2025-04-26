@@ -78,6 +78,11 @@ export const ClientRegistrationSchema = joi.object({
   email: joi.string().required().email().messages({
     'string.required': 'Email is required',
     'string.email': 'Please enter a valid email address'
+  }),
+  gender: joi.string().min(3).max(10).required().messages({
+    'string.required': 'gender is required',
+    'string.min': 'gender should have 3 or more characters',
+    'string.max': 'gender should have 10 characters or less'
   })
 });
 

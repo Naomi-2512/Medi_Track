@@ -49,13 +49,10 @@ class ClientService {
                 };
             }
         }
-        let { clientId, isDeleted, isWelcomed, createdAt, Enrollments, ...otherDetails } = client;
         let clientCreated = await this.prisma.clients.create({
             data: {
                 clientId: (0, uuid_1.v4)(),
-                isDeleted: false,
-                isWelcomed: false,
-                ...otherDetails
+                ...client
             }
         });
         if (clientCreated) {

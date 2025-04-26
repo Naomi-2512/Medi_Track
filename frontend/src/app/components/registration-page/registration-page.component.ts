@@ -1,11 +1,16 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DoctorService } from '../../services/doctor.service';
+import { NotificationsService } from '../../services/notifications.service';
+import { Router } from '@angular/router';
+import { Doctor } from '../../../interfaces/medic.interface';
+import { NotificationsComponent } from "../notifications/notifications.component";
 
 @Component({
   selector: 'app-registration-page',
-  imports: [FormsModule,CommonModule,ReactiveFormsModule],
-  templateUrl: './registration-page.component.html',
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NotificationsComponent],
+  templateUrl: './registration-page.component.html', 
   styleUrl: './registration-page.component.css'
 })
 export class RegistrationPageComponent implements OnInit {
@@ -14,7 +19,12 @@ export class RegistrationPageComponent implements OnInit {
   passwordStrength: number = 0;
   passwordStrengthText: string = '';
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private doctorService: DoctorService,
+    private notificationService: NotificationsService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.registerForm = this.fb.group({
@@ -25,7 +35,6 @@ export class RegistrationPageComponent implements OnInit {
       terms: [false, Validators.requiredTrue]
     });
 
-    // Watch password changes for strength calculation
     this.registerForm.get('password')?.valueChanges.subscribe(value => {
       this.calculatePasswordStrength(value);
     });
@@ -63,10 +72,34 @@ export class RegistrationPageComponent implements OnInit {
   }
 
   onSubmit(): void {
-    if (this.registerForm.valid) {
-      // Handle form submission
-      console.log('Form submitted:', this.registerForm.value);
-      // Add your API call or other submission logic here
+    console.log('Form submitted, valid:', this.registerForm.valid); // Debug log
+    if (this.registerForm.invalid) {
+      this.notificationService.showMessage('Please fill all required fields correctly.', false);
+      return;
     }
+
+    const doctorData: Partial<Doctor> = { 
+      firstName: this.registerForm.value.firstName,
+      lastName: this.registerForm.value.lastName,
+      email: this.registerForm.value.email,
+      password: this.registerForm.value.password
+    };
+
+    this.doctorService.createDoctor(doctorData).subscribe({
+      next: (response) => {
+        console.log('API response:', response); // Debug log
+        if (response.message) {
+          this.notificationService.showMessage(response.message, true);
+          this.registerForm.reset();
+          this.router.navigate(['/login']);
+        } else {
+          this.notificationService.showMessage(response.error || 'Failed to register doctor.', false);
+        }
+      },
+      error: (err) => {
+        console.error('Registration error:', err); // Debug log
+        this.notificationService.showMessage(err.error?.error || 'Failed to register doctor.', false);
+      }
+    });
   }
 }

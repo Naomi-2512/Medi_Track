@@ -1,0 +1,41 @@
+/* Placeholder styles - replace with your own */
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 11000;
+  }
+  
+  .notification {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    min-width: 250px;
+  }
+  
+  .success {
+    background-color: #d4edda;
+    color: #155724;
+  }
+  
+  .error {
+    background-color: #f8d7da;
+    color: #721c24;
+  }
+  
+  .notification-icon {
+    margin-right: 10px;
+  }
+  
+  .notification-content {
+    flex-grow: 1;
+  }
+  
+  .notification-close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+  }

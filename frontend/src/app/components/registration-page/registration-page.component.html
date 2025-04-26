@@ -1,163 +1,163 @@
-
 <div class="register-container">
-    <div class="register-card">
-      <div class="register-header">
-        <div class="logo-container">
-          <img src="../../../../updated-logo.svg" alt="MediTrack Logo" class="logo">
-        </div>
-        <h2>Create Your Account</h2>
-        <p>Join the healthcare platform trusted by professionals worldwide</p>
+  <app-notifications></app-notifications>
+  <div class="register-card">
+    <div class="register-header">
+      <div class="logo-container">
+        <img src="../../../../updated-logo.svg" alt="MediTrack Logo" class="logo">
       </div>
-      
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-        <div class="form-columns">
-          <div class="form-column">
-            <div class="form-group">
-              <label for="firstName">First Name</label>
-              <div class="input-container">
-                <i class="input-icon">👤</i>
-                <input 
-                  type="text" 
-                  id="firstName" 
-                  formControlName="firstName" 
-                  placeholder="Enter your first name" 
-                  required>
-              </div>
-              <div class="error-message" *ngIf="registerForm.get('firstName')?.invalid && (registerForm.get('firstName')?.dirty || registerForm.get('firstName')?.touched)">
-                First name is required
-              </div>
+      <h2>Create Your Account</h2>
+      <p>Join the healthcare platform trusted by professionals worldwide</p>
+    </div>
+    
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      <div class="form-columns">
+        <div class="form-column">
+          <div class="form-group">
+            <label for="firstName">First Name</label>
+            <div class="input-container">
+              <i class="input-icon fas fa-user"></i>
+              <input 
+                type="text" 
+                id="firstName" 
+                formControlName="firstName" 
+                placeholder="Enter your first name" 
+                required>
             </div>
-            
-            <div class="form-group">
-              <label for="lastName">Last Name</label>
-              <div class="input-container">
-                <i class="input-icon">👤</i>
-                <input 
-                  type="text" 
-                  id="lastName" 
-                  formControlName="lastName" 
-                  placeholder="Enter your last name" 
-                  required>
-              </div>
-              <div class="error-message" *ngIf="registerForm.get('lastName')?.invalid && (registerForm.get('lastName')?.dirty || registerForm.get('lastName')?.touched)">
-                Last name is required
-              </div>
+            <div class="error-message" *ngIf="registerForm.get('firstName')?.invalid && (registerForm.get('firstName')?.dirty || registerForm.get('firstName')?.touched)">
+              First name is required
             </div>
           </div>
           
-          <div class="form-column">
-            <div class="form-group">
-              <label for="email">Email Address</label>
-              <div class="input-container">
-                <i class="input-icon">✉️</i>
-                <input 
-                  type="email" 
-                  id="email" 
-                  formControlName="email" 
-                  placeholder="Enter your email address" 
-                  required>
-              </div>
-              <div class="error-message" *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)">
-                <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
-                <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</span>
-              </div>
+          <div class="form-group">
+            <label for="lastName">Last Name</label>
+            <div class="input-container">
+              <i class="input-icon fas fa-user"></i>
+              <input 
+                type="text" 
+                id="lastName" 
+                formControlName="lastName" 
+                placeholder="Enter your last name" 
+                required>
             </div>
-            
-            <div class="form-group">
-              <label for="password">Password</label>
-              <div class="input-container">
-                <i class="input-icon">🔒</i>
-                <input 
-                  [type]="showPassword ? 'text' : 'password'" 
-                  id="password" 
-                  formControlName="password" 
-                  placeholder="Create a strong password" 
-                  required>
-                <span class="toggle-password" (click)="togglePasswordVisibility()">
-                  <i>{{ showPassword ? '👁️' : '👁️‍🗨️' }}</i>
-                </span>
-              </div>
-              <div class="password-strength" *ngIf="registerForm.get('password')?.value">
-                <div class="strength-meter">
-                  <span [ngClass]="passwordStrength >= 1 ? 'active' : ''"></span>
-                  <span [ngClass]="passwordStrength >= 2 ? 'active' : ''"></span>
-                  <span [ngClass]="passwordStrength >= 3 ? 'active' : ''"></span>
-                  <span [ngClass]="passwordStrength >= 4 ? 'active' : ''"></span>
-                </div>
-                <span class="strength-text">{{ passwordStrengthText }}</span>
-              </div>
-              <div class="error-message" *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)">
-                <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
-                <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters</span>
-              </div>
+            <div class="error-message" *ngIf="registerForm.get('lastName')?.invalid && (registerForm.get('lastName')?.dirty || registerForm.get('lastName')?.touched)">
+              Last name is required
             </div>
           </div>
         </div>
         
-        <div class="form-group terms-group">
-          <div class="checkbox-container">
-            <input type="checkbox" id="terms" formControlName="terms" required>
-            <label for="terms" class="checkbox-label">
-              I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a>
-            </label>
+        <div class="form-column">
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <div class="input-container">
+              <i class="input-icon fas fa-envelope"></i>
+              <input 
+                type="email" 
+                id="email" 
+                formControlName="email" 
+                placeholder="Enter your email address" 
+                required>
+            </div>
+            <div class="error-message" *ngIf="registerForm.get('email')?.invalid && (registerForm.get('email')?.dirty || registerForm.get('email')?.touched)">
+              <span *ngIf="registerForm.get('email')?.errors?.['required']">Email is required</span>
+              <span *ngIf="registerForm.get('email')?.errors?.['email']">Please enter a valid email</span>
+            </div>
           </div>
-          <div class="error-message" *ngIf="registerForm.get('terms')?.invalid && (registerForm.get('terms')?.dirty || registerForm.get('terms')?.touched)">
-            You must agree to the terms to continue
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <div class="input-container">
+              <i class="input-icon fas fa-lock"></i>
+              <input 
+                [type]="showPassword ? 'text' : 'password'" 
+                id="password" 
+                formControlName="password" 
+                placeholder="Create a strong password" 
+                required>
+              <span class="toggle-password" (click)="togglePasswordVisibility()">
+                <i class="fas" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+              </span>
+            </div>
+            <div class="password-strength" *ngIf="registerForm.get('password')?.value">
+              <div class="strength-meter">
+                <span [ngClass]="passwordStrength >= 1 ? 'active' : ''"></span>
+                <span [ngClass]="passwordStrength >= 2 ? 'active' : ''"></span>
+                <span [ngClass]="passwordStrength >= 3 ? 'active' : ''"></span>
+                <span [ngClass]="passwordStrength >= 4 ? 'active' : ''"></span>
+              </div>
+              <span class="strength-text">{{ passwordStrengthText }}</span>
+            </div>
+            <div class="error-message" *ngIf="registerForm.get('password')?.invalid && (registerForm.get('password')?.dirty || registerForm.get('password')?.touched)">
+              <span *ngIf="registerForm.get('password')?.errors?.['required']">Password is required</span>
+              <span *ngIf="registerForm.get('password')?.errors?.['minlength']">Password must be at least 8 characters</span>
+            </div>
           </div>
         </div>
-        
-        <button type="submit" class="submit-btn" [disabled]="registerForm.invalid">
-          <span>Create Account</span>
-          <i class="arrow-icon">→</i>
-        </button>
-        
-        <div class="login-link">
-          Already have an account? <a routerLink="/login">Log in</a>
-        </div>
-      </form>
+      </div>
       
-      <div class="security-notice">
-        <i class="security-icon">🔒</i>
-        <p>Your information is secured with 256-bit encryption</p>
+      <div class="form-group terms-group">
+        <div class="checkbox-container">
+          <input type="checkbox" id="terms" formControlName="terms" required>
+          <label for="terms" class="checkbox-label">
+            I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a>
+          </label>
+        </div>
+        <div class="error-message" *ngIf="registerForm.get('terms')?.invalid && (registerForm.get('terms')?.dirty || registerForm.get('terms')?.touched)">
+          You must agree to the terms to continue
+        </div>
+      </div>
+      
+      <button type="submit" class="submit-btn" [disabled]="registerForm.invalid">
+        <span>Create Account</span>
+        <i class="arrow-icon fas fa-arrow-right"></i>
+      </button>
+      
+      <div class="login-link">
+        Already have an account? <a routerLink="/login">Log in</a>
+      </div>
+    </form>
+    
+    <div class="security-notice">
+      <i class="fas fa-shield-alt"></i>
+      <p>Your information is secured with 256-bit encryption</p>
+    </div>
+  </div>
+  
+  <div class="register-sidebar">
+    <div class="testimonial">
+      <div class="quote">"MediTrack has revolutionized how we manage patient information and health programs."</div>
+      <div class="author">
+        <img src="/api/placeholder/50/50" alt="Doctor" class="author-image">
+        <div class="author-info">
+          <h4>Dr. Sarah Johnson</h4>
+          <p>Chief Medical Officer</p>
+        </div>
       </div>
     </div>
     
-    <div class="register-sidebar">
-      <div class="testimonial">
-        <div class="quote">"MediTrack has revolutionized how we manage patient information and health programs."</div>
-        <div class="author">
-          <img src="/api/placeholder/50/50" alt="Doctor" class="author-image">
-          <div class="author-info">
-            <h4>Dr. Sarah Johnson</h4>
-            <p>Chief Medical Officer</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="features-preview">
-        <h3>What You'll Get</h3>
-        <ul class="benefits-list">
-          <li>
-            <i class="benefit-icon">✓</i>
-            <span>Seamless client registration and management</span>
-          </li>
-          <li>
-            <i class="benefit-icon">✓</i>
-            <span>Multiple program enrollment capabilities</span>
-          </li>
-          <li>
-            <i class="benefit-icon">✓</i>
-            <span>Advanced search and filtering</span>
-          </li>
-          <li>
-            <i class="benefit-icon">✓</i>
-            <span>Secure API integration</span>
-          </li>
-          <li>
-            <i class="benefit-icon">✓</i>
-            <span>Data security and privacy compliance</span>
-          </li>
-        </ul>
-      </div>
+    <div class="features-preview">
+      <h3>What You'll Get</h3>
+      <ul class="benefits-list">
+        <li>
+          <i class="benefit-icon bx bx-check"></i>
+          <span>Seamless client registration and management</span>
+        </li>
+        <li>
+          <i class="benefit-icon bx bx-check"></i>
+          <span>Multiple program enrollment capabilities</span>
+        </li>
+        <li>
+          <i class="benefit-icon bx bx-check"></i>
+          <span>Advanced search and filtering</span>
+        </li>
+        <li>
+          <i class="benefit-icon bx bx-check"></i>
+          <span>Secure API integration</span>
+        </li>
+        <li>
+          <i class="benefit-icon bx bx-check"></i>
+          <span>Data security and privacy compliance</span>
+        </li>
+      </ul>
     </div>
   </div>
+</div>

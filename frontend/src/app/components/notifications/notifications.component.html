@@ -1,0 +1,13 @@
+<div class="notification-container" *ngIf="message">
+    <div class="notification" [ngClass]="type ? 'success' : 'error'">
+      <div class="notification-icon">
+        <i class="bx" [ngClass]="type ? 'bx-check-circle' : 'bx-error-circle'"></i>
+      </div>
+      <div class="notification-content">
+        <p>{{ message }}</p>
+      </div>
+      <button class="notification-close" (click)="close()">
+        <i class='bx bx-x'></i>
+      </button>
+    </div>
+  </div>

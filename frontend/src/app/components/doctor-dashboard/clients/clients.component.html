@@ -1,0 +1,255 @@
+<div class="main-container">
+    <div class="page-header">
+      <h1>Client Management</h1>
+      <div class="action-buttons">
+        <button class="btn-primary" (click)="toggleAddClientForm()">
+          <i class='bx bx-plus'></i> Add New Client
+        </button>
+        <button class="btn-secondary" (click)="showDeletedClients()">
+          <i class='bx bx-trash'></i> Deleted Clients
+        </button>
+        <div class="search-box">
+          <input type="text" placeholder="Search clients..." [(ngModel)]="searchQuery" (keyup)="onSearch()">
+          <i class='bx bx-search'></i>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Client Form -->
+    <div class="form-container" *ngIf="showAddForm">
+      <div class="form-header">
+        <h2>{{ isEditing ? 'Edit Client' : 'Add New Client' }}</h2>
+        <button class="btn-close" (click)="toggleAddClientForm()">
+          <i class='bx bx-x'></i>
+        </button>
+      </div>
+      <form [formGroup]="clientForm" (ngSubmit)="submitClientForm()">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" formControlName="firstName" placeholder="Enter client's first name">
+          <small class="error" *ngIf="clientForm.get('firstName')?.invalid && clientForm.get('firstName')?.touched">
+            Name is required
+          </small>
+        </div>
+        <div class="form-group">
+            <label for="lastName">Second Name</label>
+            <input type="text" id="lastName" formControlName="lastName" placeholder="Enter client's second name">
+            <small class="error" *ngIf="clientForm.get('lastName')?.invalid && clientForm.get('lastName')?.touched">
+              Name is required
+            </small>
+          </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" formControlName="email" placeholder="Email address">
+            <small class="error" *ngIf="clientForm.get('email')?.invalid && clientForm.get('email')?.touched">
+              Valid email is required
+            </small>
+          </div>
+          <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="tel" id="phone" formControlName="phone" placeholder="Phone number">
+            <small class="error" *ngIf="clientForm.get('phone')?.invalid && clientForm.get('phone')?.touched">
+              Valid phone number is required
+            </small>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="dateOfBirth">Date of Birth</label>
+            <input type="date" id="dateOfBirth" formControlName="dateOfBirth">
+          </div>
+          <div class="form-group">
+            <label for="gender">Gender</label>
+            <select id="gender" formControlName="gender">
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" (click)="toggleAddClientForm()">Cancel</button>
+          <button type="submit" class="btn-primary" [disabled]="clientForm.invalid">
+            {{ isEditing ? 'Update Client' : 'Save Client' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  
+    <!-- Main Clients List -->
+    <div class="clients-container" *ngIf="!showingDeletedClients">
+      <div class="stats-cards">
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class='bx bx-user'></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ clients.length }}</h3>
+            <p>Total Clients</p>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">
+            <i class='bx bx-calendar-check'></i>
+          </div>
+          <div class="stat-info">
+            <h3>{{ getNewClientsCount() }}</h3>
+            <p>New This Week</p>
+          </div>
+        </div>
+      </div>
+  
+      <div class="data-table-container">
+        <table class="data-table" *ngIf="clients.length > 0">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Gender</th>
+              <th>Date Added</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let client of filteredClients; let i = index">
+              <td>{{ client.firstName + ' ' + client.lastName}}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.phone }}</td>
+              <td>{{ client.gender }}</td>
+              <td>{{ client.createdAt | date: 'MMM d, y' }}</td>
+              <td class="actions-cell">
+                <button class="btn-icon" (click)="viewClientDetails(client)">
+                  <i class='bx bx-show'></i>
+                </button>
+                <button class="btn-icon" (click)="editClient(client)">
+                  <i class='bx bx-edit-alt'></i>
+                </button>
+                <button class="btn-icon delete" (click)="confirmDelete(client)">
+                  <i class='bx bx-trash'></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="no-data" *ngIf="clients.length === 0">
+          <i class='bx bx-user-x'></i>
+          <p>No clients found</p>
+          <button class="btn-primary" (click)="toggleAddClientForm()">Add Your First Client</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Deleted Clients List -->
+    <div class="clients-container" *ngIf="showingDeletedClients">
+      <div class="section-header">
+        <h2>Deleted Clients</h2>
+        <button class="btn-secondary" (click)="showActiveClients()">
+          <i class='bx bx-arrow-back'></i> Back to Active Clients
+        </button>
+      </div>
+  
+      <div class="data-table-container">
+        <table class="data-table" *ngIf="deletedClients.length > 0">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Email</th>
+              <th>Phone</th>
+              <th>Gender</th>
+              <th>Deleted On</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let client of deletedClients; let i = index">
+              <td>{{ client.firstName + ' ' + client.lastName}}</td>
+              <td>{{ client.email }}</td>
+              <td>{{ client.phone }}</td>
+              <td>{{ client.gender }}</td>
+              <td class="actions-cell">
+                <button class="btn-icon success" (click)="restoreClient(client)">
+                  <i class='bx bx-revision'></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="no-data" *ngIf="deletedClients.length === 0">
+          <i class='bx bx-trash'></i>
+          <p>No deleted clients found</p>
+          <button class="btn-secondary" (click)="showActiveClients()">Back to Active Clients</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Client Details Modal -->
+    <div class="modal" *ngIf="showClientDetailsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Client Details</h2>
+          <button class="btn-close" (click)="closeClientDetailsModal()">
+            <i class='bx bx-x'></i>
+          </button>
+        </div>
+        <div class="modal-body" *ngIf="selectedClient">
+          <div class="client-detail">
+            <span class="label">Name:</span>
+            <span>{{ selectedClient.firstName }}</span>
+          </div>
+          <div class="client-detail">
+            <span class="label">Email:</span>
+            <span>{{ selectedClient.email }}</span>
+          </div>
+          <div class="client-detail">
+            <span class="label">Phone:</span>
+            <span>{{ selectedClient.phone }}</span>
+          </div>
+          <div class="client-detail">
+            <span class="label">Gender:</span>
+            <span>{{ selectedClient.gender }}</span>
+          </div>
+          <div class="client-detail">
+            <span class="label">Date of Birth:</span>
+            <span>{{ selectedClient.dateOfBirth | date: 'MMM d, y' }}</span>
+          </div>
+          <div class="client-detail">
+            <span class="label">Client Since:</span>
+            <span>{{ selectedClient.createdAt | date: 'MMM d, y' }}</span>
+          <!-- </div>
+          <div class="client-notes" *ngIf="selectedClient.enrollments">
+            <h3>Enrollments</h3>
+            <p>{{ selectedClient.Enrollments }}</p>
+          </div> -->
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeClientDetailsModal()">Close</button>
+          <button class="btn-primary" (click)="editClient(selectedClient)">Edit</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Confirmation Modal -->
+    <div class="modal confirmation-modal" *ngIf="showConfirmationModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Confirm Action</h2>
+          <button class="btn-close" (click)="closeConfirmationModal()">
+            <i class='bx bx-x'></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ confirmationMessage }}</p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn-secondary" (click)="closeConfirmationModal()">Cancel</button>
+          <button class="btn-error" (click)="confirmAction()">Confirm</button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Notification Toast -->
+    <app-notifications></app-notifications>
+  </div>
