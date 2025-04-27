@@ -225,7 +225,8 @@
           </div> -->
         </div>
         <div class="modal-footer">
-          <button class="btn-secondary" (click)="closeClientDetailsModal()">Close</button>
+          <button type="button" class="btn-secondary" title="open on new Window" (click)="navigateToUser(selectedClient.clientId)">New Window</button>
+          <button class="btn-secondary" (click)="closeClientDetailsModal()" title="Share Api">Close</button>
           <button class="btn-primary" (click)="editClient(selectedClient)">Edit</button>
         </div>
       </div>

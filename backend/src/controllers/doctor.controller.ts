@@ -27,9 +27,9 @@ export class DoctorController {
         }
     }
 
-    async fetchDoctor(req: Request, res: Response) {
+    async fetchDoctor(req: ExtendedRequest, res: Response) {
         try {
-            let result = await doctorService.fetchDoctor(req.params.doctorId);
+            let result = await doctorService.fetchDoctor(getIdFromToken(req));
             res.status(201).json(result);
         } catch (error) {
             res.status(501).json({

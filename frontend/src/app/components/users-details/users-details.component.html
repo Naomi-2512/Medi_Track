@@ -1,0 +1,228 @@
+<div class="client-details-container">
+    <!-- Back navigation -->
+    <div class="back-nav" routerLink="/doctor/clients">
+      <button class="back-btn" >
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+        Back to Clients
+      </button>
+    </div>
+  
+    <!-- Loading state -->
+    <div *ngIf="loading" class="loading-container">
+      <div class="spinner"></div>
+      <p>Loading client details...</p>
+    </div>
+  
+    <!-- Error state -->
+    <div *ngIf="error" class="error-container">
+      <div class="error-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+      </div>
+      <p>{{ errorMessage }}</p>
+      <button class="retry-btn" (click)="loadClientDetails()">Try Again</button>
+    </div>
+  
+    <!-- Client details content -->
+    <div *ngIf="!loading && !error && client" class="client-details-content">
+      <div class="client-header">
+        <div class="client-avatar">
+          {{ getInitials() }}
+        </div>
+        <div class="client-title">
+          <h1>{{ client.firstName }} {{ client.lastName }}</h1>
+          <div class="client-status" [ngClass]="{'active': !client.isDeleted, 'inactive': client.isDeleted}">
+            {{ client.isDeleted ? 'Inactive' : 'Active' }}
+          </div>
+        </div>
+        <div class="actions-container">
+          <button class="edit-btn" (click)="editClient()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+            </svg>
+            Edit
+          </button>
+          <button class="share-btn" (click)="showShareOptions()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="18" cy="5" r="3"></circle>
+              <circle cx="6" cy="12" r="3"></circle>
+              <circle cx="18" cy="19" r="3"></circle>
+              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+            </svg>
+            Share
+          </button>
+        </div>
+      </div>
+  
+      <div class="client-info-grid">
+        <!-- Personal Information Card -->
+        <div class="info-card">
+          <div class="card-header">
+            <h2>Personal Information</h2>
+          </div>
+          <div class="info-list">
+            <div class="info-item">
+              <span class="info-label">Full Name</span>
+              <span class="info-value">{{ client.firstName }} {{ client.lastName }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Email</span>
+              <span class="info-value">{{ client.email }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Phone</span>
+              <span class="info-value">{{ client.phone }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date of Birth</span>
+              <span class="info-value">{{ client.dateOfBirth | date:'mediumDate' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Gender</span>
+              <span class="info-value">{{ client.gender || 'Not specified' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Client Since</span>
+              <span class="info-value">{{ client.createdAt | date:'mediumDate' }}</span>
+            </div>
+          </div>
+        </div>
+  
+        <!-- Programs Enrollment Card -->
+        <div class="info-card">
+          <div class="card-header">
+            <h2>Enrolled Programs</h2>
+            <button class="add-program-btn" (click)="enrollInProgram()">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+              Add Program
+            </button>
+          </div>
+          
+          <div *ngIf="client.Enrollments && client.Enrollments.length > 0" class="programs-list">
+            <div *ngFor="let enrollment of client.Enrollments" class="program-item">
+              <div class="program-info">
+                <h3>{{ enrollment.Program.name }}</h3>
+                <p class="program-description">{{ enrollment.Program.description }}</p>
+                <div class="program-meta">
+                  <span class="enrollment-date">Enrolled: {{ enrollment.enrollmentDate | date:'mediumDate' }}</span>
+                  <span class="status-badge" [ngClass]="enrollment.status.toLowerCase()">{{ enrollment.status }}</span>
+                </div>
+              </div>
+              <div class="program-actions">
+                <button class="action-btn view-btn" (click)="viewProgramDetails(enrollment.programId)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+                <button class="action-btn update-btn" (click)="updateEnrollmentStatus(enrollment.enrollmentId)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div *ngIf="!client.Enrollments || client.Enrollments.length === 0" class="no-programs">
+            <div class="empty-state">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#03A9F4" stroke-width="1" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                <line x1="12" y1="22.08" x2="12" y2="12"></line>
+              </svg>
+              <p>Client is not enrolled in any programs yet.</p>
+              <button class="enroll-now-btn" (click)="enrollInProgram()">Enroll Now</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Share Modal -->
+  <div *ngIf="showShareModal" class="modal-overlay">
+    <div class="modal-content share-modal">
+      <div class="modal-header">
+        <h2>Share Client Details</h2>
+        <button class="close-btn" (click)="hideShareModal()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Share client information with other systems or healthcare providers.</p>
+        
+        <div class="share-options">
+          <div class="share-option" (click)="shareViaEmail()">
+            <div class="option-icon email">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                <polyline points="22,6 12,13 2,6"></polyline>
+              </svg>
+            </div>
+            <span>Email</span>
+          </div>
+          
+          <div class="share-option" (click)="shareViaAPI()">
+            <div class="option-icon api">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="16 18 22 12 16 6"></polyline>
+                <polyline points="8 6 2 12 8 18"></polyline>
+              </svg>
+            </div>
+            <span>API</span>
+          </div>
+          
+          <div class="share-option" (click)="generatePDF()">
+            <div class="option-icon pdf">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                <polyline points="14 2 14 8 20 8"></polyline>
+                <line x1="16" y1="13" x2="8" y2="13"></line>
+                <line x1="16" y1="17" x2="8" y2="17"></line>
+                <polyline points="10 9 9 9 8 9"></polyline>
+              </svg>
+            </div>
+            <span>PDF</span>
+          </div>
+        </div>
+  
+        <div *ngIf="selectedShareOption === 'api'" class="api-share-section">
+          <h3>API Integration</h3>
+          <div class="api-key-section">
+            <label for="apiEndpoint">API Endpoint:</label>
+            <div class="copy-input">
+              <input id="apiEndpoint" type="text" [value]="apiEndpoint" readonly>
+              <button class="copy-btn" (click)="copyToClipboard(apiEndpoint)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="cancel-btn" (click)="hideShareModal()">Cancel</button>
+        <button class="share-confirm-btn" [disabled]="!selectedShareOption" (click)="confirmShare()">Share</button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Notification Component -->
+  <app-notifications></app-notifications>

@@ -19,8 +19,8 @@ export class DoctorService {
     return this.http.put<{ message?: string, error?: string }>(`${this.API_URL}/update/${doctorId}`, doctor, { headers: getAuthHeaders() });
   }
 
-  fetchDoctor(doctorId: string): Observable<{ message?: string, data?: { doctor: Doctor } , error?: string }> {
-    return this.http.get<{ message?: string, data?: { doctor: Doctor } , error?: string }>(`${this.API_URL}/fetchOne/${doctorId}`, { headers: getAuthHeaders() });
+  fetchDoctor(): Observable<{ message?: string,  doctor?: Doctor , error?: string }> {
+    return this.http.get<{ message?: string,  doctor?: Doctor , error?: string }>(`${this.API_URL}/fetchOne`, { headers: getAuthHeaders() });
   }
 
   fetchDoctors(): Observable<{ message?: string, doctors?: Doctor[] ,error?: string }> {

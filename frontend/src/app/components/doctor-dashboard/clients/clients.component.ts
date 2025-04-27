@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { Client, ClientDetails } from '../../../../interfaces/medic.interface';
 import { ClientService } from '../../../services/client.service';
 import { NotificationsService } from '../../../services/notifications.service';
@@ -10,7 +10,7 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NotificationsComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NotificationsComponent,RouterLink],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
 })
@@ -35,7 +35,7 @@ export class ClientsComponent implements OnInit {
   constructor(
     private clientService: ClientService,
     private fb: FormBuilder,
-    private notificationService: NotificationsService
+    private notificationService: NotificationsService,private router: Router
   ) {
     this.clientForm = this.createClientForm();
   }
@@ -294,5 +294,9 @@ export class ClientsComponent implements OnInit {
       const createdDate = new Date(client.createdAt);
       return createdDate >= oneWeekAgo;
     }).length;
+  }
+
+  navigateToUser(id: string): void {
+    this.router.navigate(['userDetails', id]);
   }
 }

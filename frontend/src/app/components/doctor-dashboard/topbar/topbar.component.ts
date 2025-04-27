@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
+import { DoctorService } from '../../../services/doctor.service';
+import { Doctor } from '../../../../interfaces/medic.interface';
 
 @Component({
   selector: 'app-topbar',
@@ -11,10 +13,26 @@ import { RouterLink } from '@angular/router';
 export class TopbarComponent implements OnInit {
   @Output() menuToggle = new EventEmitter<boolean>();
   isSidebarOpen = true;
+  user!: Doctor;
 
-  constructor() { }
+  constructor(private router: Router, private doctorServise : DoctorService) { }
 
   ngOnInit(): void {
+    this.fetchUser()
+  }
+  fetchUser() {
+    this.doctorServise.fetchDoctor().subscribe({
+      next: (res) => {
+        if (res.message && res.doctor) {
+          this.user = res.doctor;
+        } else {
+          // console.error(res.error);
+        }
+      },
+      error: (err) => {
+        // console.error(err);
+      }
+    })
   }
 
   toggleSidebar(): void {

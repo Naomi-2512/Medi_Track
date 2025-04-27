@@ -4,3 +4,20 @@
     padding: 0;
     box-sizing: border-box;
 }
+
+/* General Styles */
+:root {
+    --primary: #1976D2;
+    --secondary: #03A9F4;
+    --accent: #FF5722;
+    --background: #F5F7FA;
+    --text: #333333;
+    --success: #4CAF50;
+    --warning: #FFC107;
+    --error: #F44336;
+    --border: #E0E0E0;
+    --card-bg: #FFFFFF;
+    --hover-bg: #F1F8FE;
+    --shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease;
+  }

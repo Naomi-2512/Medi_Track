@@ -8,7 +8,7 @@ export const clientRouter = Router();
 
 clientRouter.post('/create', verifyToken, clientController.createClient);
 clientRouter.put('/update/:clientId', verifyToken, clientController.updateClient);
-clientRouter.get('/fetchOne/:clientId', verifyToken, clientController.fetchClient);
+clientRouter.get('/fetchOne/:clientId', clientController.fetchClient);
 clientRouter.get('/fetchAll', verifyToken, clientController.fetchClients);
 clientRouter.get('/search', verifyToken, clientController.searchClients);
 clientRouter.put('/delete/:clientId', verifyToken, clientController.softDeleteClient);

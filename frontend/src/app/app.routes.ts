@@ -10,6 +10,7 @@ import { ApiComponent } from './components/doctor-dashboard/api/api.component';
 import { ProfileComponent } from './components/doctor-dashboard/profile/profile.component';
 import { NotificationsComponent } from './components/notifications/notifications.component';
 import { LogoutComponent } from './components/doctor-dashboard/logout/logout.component';
+import { UsersDetailsComponent } from './components/users-details/users-details.component';
 
 export const routes: Routes = [
     {path: '' , component:LandingPageComponent},
@@ -17,6 +18,7 @@ export const routes: Routes = [
     {path: 'login' , component:LoginPageComponent},
     {path: 'notifications' , component:NotificationsComponent},
     {path: 'logout' , component:LogoutComponent},
+    {path: 'userDetails/:clientId' , component:UsersDetailsComponent},
     {path: 'doctor' , component:DoctorDashboardComponent, children: [
         {path: 'dashboard', component: DashboardComponent},
         {path: 'programs', component: ProgramsComponent},
