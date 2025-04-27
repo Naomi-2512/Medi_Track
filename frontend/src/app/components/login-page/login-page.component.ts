@@ -1,14 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { NotificationsService } from '../../services/notifications.service';
 import { AuthService } from '../../services/auth.service';
 import { NotificationsComponent } from "../notifications/notifications.component";
 
 @Component({
   selector: 'app-login-page',
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NotificationsComponent],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule, NotificationsComponent,RouterLink],
   templateUrl: './login-page.component.html',
   styleUrl: './login-page.component.css'
 })

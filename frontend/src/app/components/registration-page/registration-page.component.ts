@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DoctorService } from '../../services/doctor.service';
 import { NotificationsService } from '../../services/notifications.service';
-import { Router } from '@angular/router';
+import { Router, RouterEvent, RouterLink } from '@angular/router';
 import { Doctor } from '../../../interfaces/medic.interface';
 import { NotificationsComponent } from "../notifications/notifications.component";
 
 @Component({
   selector: 'app-registration-page',
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NotificationsComponent],
+  imports: [FormsModule, CommonModule,RouterLink, ReactiveFormsModule, NotificationsComponent],
   templateUrl: './registration-page.component.html', 
   styleUrl: './registration-page.component.css'
 })
