@@ -12,7 +12,7 @@ class ClientService {
         const { error } = inputValidators_1.ClientRegistrationSchema.validate(client);
         if (error) {
             return {
-                "error": error.details[0].message
+                "error": error.message
             };
         }
         let emailExists = await this.prisma.clients.findUnique({
@@ -52,7 +52,8 @@ class ClientService {
         let clientCreated = await this.prisma.clients.create({
             data: {
                 clientId: (0, uuid_1.v4)(),
-                ...client
+                ...client,
+                dateOfBirth: new Date(client.dateOfBirth),
             }
         });
         if (clientCreated) {
@@ -109,7 +110,8 @@ class ClientService {
                 clientId
             },
             data: {
-                ...otherDetails
+                ...otherDetails,
+                dateOfBirth: new Date(client.dateOfBirth),
             }
         });
         if (clientUpdated) {

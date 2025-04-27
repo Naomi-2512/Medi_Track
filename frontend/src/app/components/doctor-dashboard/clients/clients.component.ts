@@ -10,7 +10,7 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NotificationsComponent, RouterLink],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NotificationsComponent],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
 })
@@ -46,14 +46,12 @@ export class ClientsComponent implements OnInit {
   
   createClientForm(): FormGroup {
     return this.fb.group({
-      clientId: [''],
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', [Validators.required]],
       dateOfBirth: [''],
-      gender: [''],
-      isWelcomed: [false]
+      gender: ['']
     });
   }
   
@@ -103,7 +101,6 @@ export class ClientsComponent implements OnInit {
   }
   
   submitClientForm(): void {
-    console.log('Submit button clicked, form valid:', this.clientForm.valid, 'Form value:', this.clientForm.value);
     if (this.clientForm.invalid) {
       this.notificationService.showMessage('Please fill all required fields correctly.', false);
       return;
@@ -117,7 +114,7 @@ export class ClientsComponent implements OnInit {
       dateOfBirth: this.clientForm.value.dateOfBirth,
       gender: this.clientForm.value.gender || undefined
     };
-    
+
     if (this.isEditing && this.selectedClient) {
       this.clientService.updateClient(this.selectedClient.clientId, clientData).subscribe({
         next: (response) => {
@@ -179,9 +176,7 @@ export class ClientsComponent implements OnInit {
   
   confirmDelete(client: Client): void {
     this.selectedClient = client;
-    this.confirmationMessage = `Are you sure you want to delete client "${client.firstName + ' ' + client.lastName}"?`;
-    this.confirmationAction = this.deleteClient.bind(this);
-    this.showConfirmationModal = true;
+    this.deleteClient();
   }
   
   deleteClient(): void {

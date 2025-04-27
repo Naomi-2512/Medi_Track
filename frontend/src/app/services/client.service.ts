@@ -32,11 +32,11 @@ export class ClientService {
   }
 
   softDeleteClient(clientId: string): Observable<{ message?: string ,error?: string }> {
-    return this.http.put<{ message?: string ,error?: string }>(`${this.API_URL}/delete/${clientId}`, { headers: getAuthHeaders() });
+    return this.http.put<{ message?: string ,error?: string }>(`${this.API_URL}/delete/${clientId}`, {}, { headers: getAuthHeaders() });
   }
 
   restoreDeletedClient(clientId: string): Observable<{ message?: string, error?: string }> {
-    return this.http.patch<{ message?: string, error?: string }>(`${this.API_URL}/restore/${clientId}/restore`, {}, { headers: getAuthHeaders() });
+    return this.http.patch<{ message?: string, error?: string }>(`${this.API_URL}/restore/${clientId}`, {}, { headers: getAuthHeaders() });
   }
 
   fetchDeletedClients(): Observable<{ message?: string, clients?: Client[] ,error?: string }> {

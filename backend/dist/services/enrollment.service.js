@@ -15,15 +15,14 @@ class EnrollmentService {
                 "error": error.details[0].message
             };
         }
-        let clientExists = await this.prisma.clients.findFirst({
+        let clientExists = await this.prisma.enrollments.findFirst({
             where: {
-                clientId: enrollment.clientId,
-                isDeleted: false
+                clientId: enrollment.clientId
             }
         });
-        if (!clientExists) {
+        if (clientExists) {
             return {
-                "error": "The client does not exist or is deleted"
+                "error": "The client is already enrolled in this program"
             };
         }
         let programExists = await this.prisma.programs.findUnique({
@@ -40,7 +39,9 @@ class EnrollmentService {
         let enrollmentCreated = await this.prisma.enrollments.create({
             data: {
                 enrollmentId: (0, uuid_1.v4)(),
-                ...otherDetails
+                programId: enrollment.programId || '',
+                clientId: enrollment.clientId || '',
+                enrollmentDate: new Date()
             }
         });
         if (enrollmentCreated) {

@@ -129,7 +129,7 @@
               </thead>
               <tbody>
                 <tr *ngFor="let enrollment of selectedProgram.Enrollments">
-                  <td>{{ enrollment.Client?.firstName }} {{ enrollment.Client?.lastName }}</td>
+                  <td>{{ enrollment.Client.firstName }} {{ enrollment.Client.lastName }}</td>
                   <td>{{ enrollment.enrollmentDate | date:'MMM d, yyyy' }}</td>
                   <td>
                     <span class="status-pill" [ngClass]="enrollment.status.toLowerCase()">

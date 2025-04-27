@@ -8,7 +8,7 @@ export class EnrollmentService {
         log: ['error']
     });
 
-    async createEnrollment(enrollment: Enrollment) {
+    async createEnrollment(enrollment: Partial<Enrollment>) {
         const { error } = EnrollmentRegistrationSchema.validate(enrollment);
         if (error) {
             return {
@@ -16,16 +16,15 @@ export class EnrollmentService {
             };
         }
 
-        let clientExists = await this.prisma.clients.findFirst({
+        let clientExists = await this.prisma.enrollments.findFirst({
             where: {
-                clientId: enrollment.clientId,
-                isDeleted: false
+                clientId: enrollment.clientId
             }
         });
 
-        if (!clientExists) {
+        if (clientExists) {
             return {
-                "error": "The client does not exist or is deleted"
+                "error": "The client is already enrolled in this program"
             };
         }
 
@@ -46,7 +45,9 @@ export class EnrollmentService {
         let enrollmentCreated = await this.prisma.enrollments.create({
             data: {
                 enrollmentId: v4(),
-                ...otherDetails
+                programId: enrollment.programId || '',
+                clientId: enrollment.clientId || '',
+                enrollmentDate: new Date()
             }
         });
 

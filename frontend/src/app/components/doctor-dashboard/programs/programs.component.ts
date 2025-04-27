@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-programs',
-  imports: [NotificationsComponent,CommonModule, FormsModule, ReactiveFormsModule, RouterLink],
+  imports: [NotificationsComponent,CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './programs.component.html',
   styleUrl: './programs.component.css'
 })
@@ -65,6 +65,8 @@ export class ProgramsComponent {
   fetchAllPrograms(): void {
     this.programService.fetchPrograms().subscribe({
       next: (response) => {
+        console.log(response.message);
+        
         if (response.programs) {
           this.programs = response.programs;
           this.filteredPrograms = [...this.programs];
@@ -97,9 +99,9 @@ export class ProgramsComponent {
   fetchProgramDetails(programId: string): void {
     this.programService.fetchProgram(programId).subscribe({
       next: (response) => {
-        if (response.data?.program) {
+        if (response.program) {
           // Update the selected program with full details including enrollments
-          this.selectedProgram = response.data.program;
+          this.selectedProgram = response.program as Program;
         } else {
           this.notificationService.showMessage(response.error || 'Failed to load program details.', false);
         }
@@ -185,7 +187,6 @@ export class ProgramsComponent {
   
   viewProgramDetails(program: Program): void {
     this.selectedProgram = program;
-    this.fetchProgramDetails(program.programId);
     this.showProgramDetailsModal = true;
   }
   
@@ -242,9 +243,10 @@ export class ProgramsComponent {
   enrollClient(client: Client): void {
     if (!this.selectedProgram) return;
     
-    const enrollmentData = {
+    const enrollmentData: Partial<Enrollment> = {
       clientId: client.clientId,
       programId: this.selectedProgram.programId,
+      enrollmentDate: new Date(),
       status: 'Active'
     };
     

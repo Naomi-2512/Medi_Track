@@ -108,7 +108,11 @@ export class ProgramService {
                 programId
             },
             include: {
-                Enrollments: true
+                Enrollments: {
+                    include: {
+                        Client: true
+                    }
+                }
             }
         });
 
@@ -127,7 +131,11 @@ export class ProgramService {
     async fetchPrograms() {
         let programsFetched = await this.prisma.programs.findMany({
             include: {
-                Enrollments: true
+                Enrollments: {
+                    include: {
+                        Client: true
+                    }
+                }
             }
         });
 

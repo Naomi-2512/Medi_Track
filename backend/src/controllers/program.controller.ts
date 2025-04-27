@@ -38,7 +38,7 @@ export class ProgramController {
         }
     }
 
-    async fetchPrograms(res: Response) {
+    async fetchPrograms(req: Request, res: Response) {
         try {
             let result = await programService.fetchPrograms();
             res.status(201).json(result);

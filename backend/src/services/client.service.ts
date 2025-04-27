@@ -12,7 +12,7 @@ export class ClientService {
         const { error } = ClientRegistrationSchema.validate(client);
         if (error) {
             return {
-                "error": error.details[0].message
+                "error": error.message
             };
         }
 
@@ -55,7 +55,8 @@ export class ClientService {
         let clientCreated = await this.prisma.clients.create({
             data: {
                 clientId: v4(),
-                ...client
+                ...client,
+                dateOfBirth: new Date(client.dateOfBirth),
             }
         });
 
@@ -121,7 +122,8 @@ export class ClientService {
                 clientId
             },
             data: {
-                ...otherDetails
+                ...otherDetails,
+                dateOfBirth: new Date(client.dateOfBirth),
             }
         });
 

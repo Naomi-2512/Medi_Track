@@ -20,8 +20,8 @@ export class ProgramService {
     return this.http.put<{ message?: string,  error?: string }>(`${this.API_URL}/update/${programId}`, program, { headers: getAuthHeaders() });
   }
 
-  fetchProgram(programId: string): Observable<{ message?: string, data?: { program: Program }, error?: string }> {
-    return this.http.get<{ message?: string, data?: { program: Program }, error?: string }>(`${this.API_URL}/fetchOne/${programId}`, { headers: getAuthHeaders() });
+  fetchProgram(programId: string): Observable<{ message?: string, program?: Program, error?: string }> {
+    return this.http.get<{ message?: string, program?: Program, error?: string }>(`${this.API_URL}/fetchOne/${programId}`, { headers: getAuthHeaders() });
   }
 
   fetchPrograms(): Observable<{ message?: string, programs?: Program[] ,error?: string }> {
