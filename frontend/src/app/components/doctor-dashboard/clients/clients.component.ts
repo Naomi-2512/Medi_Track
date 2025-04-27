@@ -10,7 +10,7 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NotificationsComponent,RouterLink],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NotificationsComponent],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
 })
