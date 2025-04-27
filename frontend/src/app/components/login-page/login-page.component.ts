@@ -36,7 +36,7 @@ export class LoginPageComponent {
   }
 
   onSubmit(): void {
-    console.log('Form submitted, valid:', this.loginForm.valid); // Debug log
+    console.log('Form submitted, valid:', this.loginForm.valid);
     if (this.loginForm.invalid) {
       this.notificationService.showMessage('Please fill all required fields correctly.', false);
       return;
@@ -49,19 +49,20 @@ export class LoginPageComponent {
 
     this.authService.loginDoctor(credentials).subscribe({
       next: (response) => {
-        console.log('Login response:', response); // Debug log
-        
+        console.log('API response:', response);
         if (response.message && response.token) {
-          localStorage.setItem('authToken', response.token); 
+          localStorage.setItem('authToken', response.token);
           this.notificationService.showMessage(response.message, true);
           this.loginForm.reset();
-          this.router.navigate(['/doctor']);
+          setTimeout(() => {
+            this.router.navigate(['/doctor']);
+          }, 2000);
         } else {
           this.notificationService.showMessage(response.error || 'Failed to log in.', false);
         }
       },
       error: (err) => {
-        console.error('Login error:', err); // Debug log
+        console.error('Login error:', err);
         this.notificationService.showMessage(err.error?.error || 'Failed to log in.', false);
       }
     });
@@ -69,11 +70,9 @@ export class LoginPageComponent {
 
   signInWithGoogle(): void {
     console.log('Google sign-in initiated');
-    // Implement Google sign-in logic here
   }
 
   signInWithMicrosoft(): void {
     console.log('Microsoft sign-in initiated');
-    // Implement Microsoft sign-in logic here
   }
 }

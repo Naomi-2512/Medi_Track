@@ -8,22 +8,22 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class EnrollmentService {
-  API_URL: string = 'http://localhost:3000/api/enrollments';
+  API_URL: string = 'http://localhost:3000/enrollments';
   constructor(private http: HttpClient) { }
 
-  createEnrollment(enrollment: Partial<Enrollment>): Observable<{ message: string, data?: { enrollment: Enrollment } } | { error: string }> {
-    return this.http.post<{ message: string, data?: { enrollment: Enrollment } } | { error: string }>(`${this.API_URL}/`, enrollment, { headers: getAuthHeaders() });
+  createEnrollment(enrollment: Partial<Enrollment>): Observable<{ message?: string, error?: string }> {
+    return this.http.post<{ message?: string, error?: string }>(`${this.API_URL}/create`, enrollment, { headers: getAuthHeaders() });
   }
 
-  updateEnrollment(enrollmentId: string, enrollment: Partial<Enrollment>): Observable<{ message: string, data?: { enrollment: Enrollment } } | { error: string }> {
-    return this.http.put<{ message: string, data?: { enrollment: Enrollment } } | { error: string }>(`${this.API_URL}/${enrollmentId}`, enrollment, { headers: getAuthHeaders() });
+  updateEnrollment(enrollmentId: string, enrollment: Partial<Enrollment>): Observable<{ message?: string, error?: string }> {
+    return this.http.put<{ message?: string, error?: string }>(`${this.API_URL}/update/${enrollmentId}`, enrollment, { headers: getAuthHeaders() });
   }
 
-  fetchEnrollment(enrollmentId: string): Observable<{ message: string, data?: { enrollment: Enrollment } } | { error: string }> {
-    return this.http.get<{ message: string, data?: { enrollment: Enrollment } } | { error: string }>(`${this.API_URL}/${enrollmentId}`, { headers: getAuthHeaders() });
+  fetchEnrollment(enrollmentId: string): Observable<{ message?: string, data?: { enrollment: Enrollment },error?: string }> {
+    return this.http.get<{ message?: string, data?: { enrollment: Enrollment },error?: string }>(`${this.API_URL}/fetchOne/${enrollmentId}`, { headers: getAuthHeaders() });
   }
 
-  fetchEnrollments(): Observable<{ message: string, enrollments?: Enrollment[] } | { error: string }> {
-    return this.http.get<{ message: string, enrollments?: Enrollment[] } | { error: string }>(`${this.API_URL}/`, { headers: getAuthHeaders() });
+  fetchEnrollments(): Observable<{ message?: string, enrollments?: Enrollment[],error?: string }> {
+    return this.http.get<{ message?: string, enrollments?: Enrollment[],error?: string }>(`${this.API_URL}/fetchAll`, { headers: getAuthHeaders() });
   }
 }

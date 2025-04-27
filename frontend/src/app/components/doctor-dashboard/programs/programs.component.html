@@ -1,1 +1,247 @@
-<p>programs works!</p>
+<!-- program.component.html -->
+<div class="programs-container">
+    <div class="header-section">
+      <h1>Program Management</h1>
+      <button class="add-program-btn" (click)="toggleAddProgramForm()">
+        <i class="bx bx-plus"></i> Create Program
+      </button>
+    </div>
+  
+    <!-- Search Bar -->
+    <div class="search-section">
+      <div class="search-bar">
+        <i class="fa fa-search"></i>
+        <input type="text" [(ngModel)]="searchQuery" placeholder="Search programs..." (input)="onSearch()">
+      </div>
+    </div>
+  
+    <!-- Add/Edit Program Form -->
+    <div class="form-container" *ngIf="showAddForm">
+      <div class="form-card">
+        <div class="form-header">
+          <h2>{{ isEditing ? 'Edit Program' : 'Add New Program' }}</h2>
+          <button class="close-btn" (click)="toggleAddProgramForm()">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        <form [formGroup]="programForm" (ngSubmit)="submitProgramForm()">
+          <div class="form-group">
+            <label for="name">Program Name*</label>
+            <input type="text" id="name" formControlName="name" placeholder="Enter program name">
+            <div class="error-message" *ngIf="programForm.get('name')?.invalid && programForm.get('name')?.touched">
+              Program name is required
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description*</label>
+            <textarea id="description" formControlName="description" placeholder="Enter program description" rows="3"></textarea>
+            <div class="error-message" *ngIf="programForm.get('description')?.invalid && programForm.get('description')?.touched">
+              Program description is required
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="cancel-btn" (click)="resetForm()">Cancel</button>
+            <button type="submit" class="submit-btn" [disabled]="programForm.invalid">
+              {{ isEditing ? 'Update' : 'Save' }}
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  
+    <!-- Programs List -->
+    <div class="programs-list">
+      <div *ngIf="filteredPrograms.length === 0" class="no-data">
+        <i class="bx bx-folder-open"></i>
+        <p>No programs found. Create your first program!</p>
+      </div>
+  
+      <div class="program-card" *ngFor="let program of filteredPrograms">
+        <div class="program-header">
+          <h2>{{ program.name }}</h2>
+          <span class="status-badge active">Active</span>
+        </div>
+        <p class="program-date">Started: {{ program.createdAt | date:'MMM d, yyyy' }}</p>
+        
+        <div class="enrollment-info">
+          <h3>{{ getEnrollmentCount(program) }} Enrolled clients</h3>
+          <div class="capacity-bar-container">
+            <p class="capacity-label">Program capacity</p>
+            <div class="capacity-bar">
+              <div class="capacity-progress" [style.width]="getCapacityPercentage(program) + '%'"></div>
+            </div>
+            <p class="capacity-text">{{ getEnrollmentCount(program) }}/{{ getProgramCapacity(program) }}</p>
+          </div>
+        </div>
+  
+        <div class="program-actions">
+          <button class="view-btn" (click)="viewProgramDetails(program)">
+            <i class="fa fa-eye"></i> View
+          </button>
+          <button class="edit-btn" (click)="editProgram(program)">
+            <i class="fa fa-edit"></i> Edit
+          </button>
+          <button class="add-client-btn" (click)="openEnrollClientModal(program)">
+            Add Client
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Program Details Modal -->
+    <div class="modal" *ngIf="showProgramDetailsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Program Details</h2>
+          <button class="close-btn" (click)="closeProgramDetailsModal()">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body" *ngIf="selectedProgram">
+          <div class="details-section">
+            <div class="detail-row">
+              <span class="label">Name:</span>
+              <span class="value">{{ selectedProgram.name }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Description:</span>
+              <span class="value">{{ selectedProgram.description }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Created:</span>
+              <span class="value">{{ selectedProgram.createdAt | date:'MMM d, yyyy' }}</span>
+            </div>
+          </div>
+  
+          <div class="enrolled-clients">
+            <h3>Enrolled Clients</h3>
+            <div *ngIf="!selectedProgram.Enrollments || selectedProgram.Enrollments.length === 0" class="no-data">
+              <p>No clients enrolled in this program</p>
+            </div>
+            <table *ngIf="selectedProgram.Enrollments && selectedProgram.Enrollments.length > 0">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Enrollment Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let enrollment of selectedProgram.Enrollments">
+                  <td>{{ enrollment.Client?.firstName }} {{ enrollment.Client?.lastName }}</td>
+                  <td>{{ enrollment.enrollmentDate | date:'MMM d, yyyy' }}</td>
+                  <td>
+                    <span class="status-pill" [ngClass]="enrollment.status.toLowerCase()">
+                      {{ enrollment.status }}
+                    </span>
+                  </td>
+                  <td>
+                    <button class="action-btn" (click)="viewClientDetails(enrollment.Client)">
+                      <i class="fa fa-user"></i>
+                    </button>
+                    <button class="action-btn danger" (click)="confirmUnenroll(enrollment)">
+                      <i class="fa fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Enroll Client Modal -->
+    <div class="modal" *ngIf="showEnrollClientModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Enroll Client in {{ selectedProgram?.name }}</h2>
+          <button class="close-btn" (click)="closeEnrollClientModal()">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="search-section">
+            <div class="search-bar">
+              <i class="fa fa-search"></i>
+              <input type="text" [(ngModel)]="clientSearchQuery" placeholder="Search clients..." (input)="searchClients()">
+            </div>
+          </div>
+          
+          <div class="clients-list">
+            <div *ngIf="availableClients.length === 0" class="no-data">
+              <p>No clients found or all clients already enrolled</p>
+            </div>
+            <div class="client-item" *ngFor="let client of availableClients">
+              <div class="client-info">
+                <h4>{{ client.firstName }} {{ client.lastName }}</h4>
+                <p>{{ client.email }}</p>
+              </div>
+              <button class="enroll-btn" (click)="enrollClient(client)">
+                Enroll
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Confirmation Modal -->
+    <div class="modal" *ngIf="showConfirmationModal">
+      <div class="modal-content confirmation-modal">
+        <div class="modal-header">
+          <h2>Confirm Action</h2>
+          <button class="close-btn" (click)="closeConfirmationModal()">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>{{ confirmationMessage }}</p>
+          <div class="confirmation-actions">
+            <button class="cancel-btn" (click)="closeConfirmationModal()">Cancel</button>
+            <button class="confirm-btn" (click)="confirmAction()">Confirm</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Client Details Modal -->
+    <div class="modal" *ngIf="showClientDetailsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Client Details</h2>
+          <button class="close-btn" (click)="closeClientDetailsModal()">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+        <div class="modal-body" *ngIf="selectedClient">
+          <div class="details-section">
+            <div class="detail-row">
+              <span class="label">Name:</span>
+              <span class="value">{{ selectedClient.firstName }} {{ selectedClient.lastName }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Email:</span>
+              <span class="value">{{ selectedClient.email }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Phone:</span>
+              <span class="value">{{ selectedClient.phone }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Gender:</span>
+              <span class="value">{{ selectedClient.gender || 'Not specified' }}</span>
+            </div>
+            <div class="detail-row">
+              <span class="label">Date of Birth:</span>
+              <span class="value">{{ selectedClient.dateOfBirth | date:'MMM d, yyyy' }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Notifications Component -->
+    <app-notifications></app-notifications>
+  </div>

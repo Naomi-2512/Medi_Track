@@ -9,9 +9,8 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
 
 @Component({
   selector: 'app-clients',
-  imports: [CommonModule,
-    FormsModule,
-    ReactiveFormsModule, NotificationsComponent],
+  standalone: true,
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NotificationsComponent, RouterLink],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.css'
 })
@@ -104,15 +103,25 @@ export class ClientsComponent implements OnInit {
   }
   
   submitClientForm(): void {
-    if (this.clientForm.invalid) return;
+    console.log('Submit button clicked, form valid:', this.clientForm.valid, 'Form value:', this.clientForm.value);
+    if (this.clientForm.invalid) {
+      this.notificationService.showMessage('Please fill all required fields correctly.', false);
+      return;
+    }
     
     const clientData: ClientDetails = {
-      ...this.clientForm.value
+      firstName: this.clientForm.value.firstName,
+      lastName: this.clientForm.value.lastName,
+      email: this.clientForm.value.email,
+      phone: this.clientForm.value.phone,
+      dateOfBirth: this.clientForm.value.dateOfBirth,
+      gender: this.clientForm.value.gender || undefined
     };
     
     if (this.isEditing && this.selectedClient) {
       this.clientService.updateClient(this.selectedClient.clientId, clientData).subscribe({
         next: (response) => {
+          console.log('Update response:', response);
           if (response.message) {
             const index = this.clients.findIndex(c => c.clientId === this.selectedClient?.clientId);
             if (index !== -1) {
@@ -121,31 +130,31 @@ export class ClientsComponent implements OnInit {
               this.sortClientsByDate();
             }
             this.notificationService.showMessage(response.message, true);
-            this.toggleAddClientForm();
+            setTimeout(() => this.toggleAddClientForm(), 2000);
           } else {
             this.notificationService.showMessage(response.error || 'Failed to update client.', false);
           }
         },
         error: (err) => {
+          console.error('Update error:', err);
           this.notificationService.showMessage(err.error?.error || 'Failed to update client.', false);
         }
       });
     } else {
       this.clientService.createClient(clientData).subscribe({
         next: (response) => {
-          console.log(response);
+          console.log('Create response:', response);
           if (response.message) {
             this.fetchAllClients();
-            this.filteredClients = [...this.clients];
-            this.sortClientsByDate();
             this.notificationService.showMessage(response.message, true);
-            this.toggleAddClientForm();
+            setTimeout(() => this.toggleAddClientForm(), 2000);
           } else {
-            this.notificationService.showMessage(response.error as string, false);
+            this.notificationService.showMessage(response.error || 'Failed to create client.', false);
           }
         },
         error: (err) => {
-          this.notificationService.showMessage(err.error?.error as string, false);
+          console.error('Create error:', err);
+          this.notificationService.showMessage(err.error?.error || 'Failed to create client.', false);
         }
       });
     }
@@ -184,7 +193,7 @@ export class ClientsComponent implements OnInit {
           this.clients = this.clients.filter(c => c.clientId !== this.selectedClient?.clientId);
           this.filteredClients = [...this.clients];
           this.notificationService.showMessage(response.message, true);
-          this.closeConfirmationModal();
+          setTimeout(() => this.closeConfirmationModal(), 2000);
         } else {
           this.notificationService.showMessage(response.error || 'Failed to delete client.', false);
         }
@@ -201,6 +210,7 @@ export class ClientsComponent implements OnInit {
         if (response.message) {
           this.deletedClients = this.deletedClients.filter(c => c.clientId !== client.clientId);
           this.notificationService.showMessage(response.message, true);
+          setTimeout(() => this.fetchAllClients(), 2000);
         } else {
           this.notificationService.showMessage(response.error || 'Failed to restore client.', false);
         }
