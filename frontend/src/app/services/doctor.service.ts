@@ -8,7 +8,7 @@ import { getAuthHeaders } from './client.service';
   providedIn: 'root'
 })
 export class DoctorService {
-  API_URL: string = 'http://localhost:3000/doctors';
+  API_URL: string = 'https://medi-track-euux.onrender.com/doctors';
   constructor(private http: HttpClient) { }
 
   createDoctor(doctor:Partial < Doctor>): Observable<{ message?: string, error?: string }> {

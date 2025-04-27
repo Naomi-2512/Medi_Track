@@ -7,7 +7,7 @@ import { Client, ClientDetails } from '../../interfaces/medic.interface';
   providedIn: 'root'
 })
 export class ClientService {
-  API_URL: string = 'http://localhost:3000/clients';
+  API_URL: string = 'https://medi-track-euux.onrender.com/clients';
 
   constructor(private http: HttpClient) { }
 

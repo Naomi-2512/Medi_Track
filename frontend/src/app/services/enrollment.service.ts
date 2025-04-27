@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class EnrollmentService {
-  API_URL: string = 'http://localhost:3000/enrollments';
+  API_URL: string = 'https://medi-track-euux.onrender.com/enrollments';
   constructor(private http: HttpClient) { }
 
   createEnrollment(enrollment: Partial<Enrollment>): Observable<{ message?: string, error?: string }> {

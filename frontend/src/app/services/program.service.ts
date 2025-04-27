@@ -8,7 +8,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class ProgramService {
-  API_URL: string = 'http://localhost:3000/programs';
+  API_URL: string = 'https://medi-track-euux.onrender.com/programs';
 
   constructor(private http: HttpClient) { }
 
