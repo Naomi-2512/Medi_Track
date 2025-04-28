@@ -7,6 +7,9 @@ MediTrack is a comprehensive application designed for doctors to manage clients 
 ## Live demo link 
 [Live Demo](https://medic-track.onrender.com)
 
+## Video prototype link
+[View Project Demo](https://drive.google.com/file/d/1_bpZb8EEKQJts4o_M_MwS2WiadIr70vW/view?usp=sharing)
+
 ## Features
 
 - **Client Management**: Add, update, and manage client details.
